@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/ico" href="favicon.ico" />
+    <title>Student Corner</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..700&display=swap");
+      body {
+        font-family: "Manrope", sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: white;
+      }
+
+      #progress-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background-color: transparent;
+        z-index: 9999;
+      }
+
+      #progress-bar {
+        height: 4px;
+        background-color: #00a651;
+        width: 0;
+        animation: progressBarAnimation 1s forwards;
+      }
+
+      @keyframes progressBarAnimation {
+        from {
+          width: 0;
+        }
+        to {
+          width: 100%;
+        }
+      }
+
+
+      .container {
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px; /* Add margin to create space between container and footer */
+      }
+
+      .title-box {
+        background: linear-gradient(135deg, #4caf50, #388e3c);
+        border-radius: 10px;
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        margin: 0;
+        text-align: center;
+        color: #fff;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        text-align: left;
+      }
+
+      li {
+        margin-bottom: 10px;
+      }
+
+      a {
+        text-decoration: none;
+        color: #333;
+      }
+
+      /* Style for the hover effect */
+      a:hover {
+        background-color: #f0f8ff; /* Light green background color */
+        border-radius: 5px; /* Rounded edges */
+        padding: 2px 5px; /* Padding */
+      }
+
+      .footer {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  background-color: transparent;
+  padding: 10px 0;
+  color: black;
+  font-size: 12px;
+  position: absolute;
+}
+
+      /* Style for the logo */
+      .logo {
+        position: absolute;
+        top: 40px;
+        left: 80px;
+        width: 60px; /* Adjust width as needed */
+        height: auto; /* Maintain aspect ratio */
+      }
+      @media (width <768px)
+      {
+        .container {
+        margin-top: -250px;
+        border-radius: 0px;
+      }
+      .footer{
+        font-size: 10px;
+      }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="progress-container">
+      <div id="progress-bar"></div>
+    </div>
+    <div class="container">
+      <div class="title-box">
+        <h1>Student Corner</h1>
+      </div>
+      <ul id="fileList">
+        <!-- Example list item -->
+        <!-- <li><a href="#">example_file.txt</a></li> -->
+      </ul>
+    </div>
+
+    <div class="footer">
+      ©2024, Designed and developed by
+      <a
+        href="https://teamsiliconx.github.io/aboutus"
+        style="color: #00a651; text-decoration: none"
+        id="Siliconx"
+        >Siliconx Softwares</a
+      >(ECE, KUET). Powered by Central Computer Center(KUET). All rights
+      reserved.
+    </div>
+
+    <script>
+
+      // Function to show progress bar for 1 second
+      function showProgressBar(callback) {
+        // Show progress bar
+        document.getElementById("progress-bar").style.display = "block";
+
+        // Hide progress bar after 1 second
+        setTimeout(function () {
+          document.getElementById("progress-bar").style.display = "none";
+          if (callback) {
+            callback(); // Execute callback function
+          }
+        }, 1000);
+      }
+      window.addEventListener("load", function () {
+        showProgressBar(); // Show progress bar on page load
+      });
+
+
+      // Function to fetch and display the list of files
+      async function fetchFiles() {
+        const response = await fetch("/files");
+        const files = await response.json();
+
+        const fileList = document.getElementById("fileList");
+        fileList.innerHTML = "";
+
+        files.forEach((file, index) => {
+          const listItem = document.createElement("li");
+          const link = document.createElement("a");
+          link.href = `/download/${encodeURIComponent(file)}`;
+          link.textContent = `${index + 1}. ${file}`; // Add index number before file name
+          listItem.appendChild(link);
+          fileList.appendChild(listItem);
+        });
+      }
+
+      // Call fetchFiles when the page loads
+      window.onload = fetchFiles;
+    </script>
+  </body>
+</html>
